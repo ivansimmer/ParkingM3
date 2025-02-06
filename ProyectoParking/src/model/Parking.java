@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import model.data.EnumVehiculo;
+import model.data.enums.EnumVehiculo;
+import model.data.exceptions.NotFreePlacesException;
+import model.data.exceptions.TicketNotFoundException;
 
 /**
  *
@@ -12,6 +14,7 @@ import model.data.EnumVehiculo;
  */
 public class Parking {
 
+    // Lista de colores con codigo ANSI
     public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
     public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
     public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
@@ -21,7 +24,10 @@ public class Parking {
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
     
+    // Para libres, color verde
     String freeSlotColor = ANSI_GREEN_BACKGROUND;
+    
+    // Para ocupadas, color rojo
     String occupiedSlotColor = ANSI_RED_BACKGROUND;
 
     private int id;
@@ -32,7 +38,9 @@ public class Parking {
     private int numPlazasPorPiso;
     private Map<EnumVehiculo, Double> listaTarifa;
     private ArrayList<ArrayList<Plaza>> listaPlazas;
-    private Map<String, Ticket> ticketsActivos;  // Lo uso para almacenar los tickets activos
+    
+    // Map para gestionar los tickets en activos
+    private Map<String, Ticket> ticketsActivos;
 
     public Parking(int id, String nombre, String ubicacion, String telefono, int numPisos, int numPlazasPorPiso, Map<EnumVehiculo, Double> listaTarifa) {
         this.id = id;
@@ -65,7 +73,7 @@ public class Parking {
         }
     }
 
-    public String asignarPlaza(Vehiculo vehiculo) {
+    public String asignarPlaza(Vehiculo vehiculo) throws NotFreePlacesException {
         for (int i = 0; i < listaPlazas.size(); i++) {
             for (Plaza plaza : listaPlazas.get(i)) {
                 if (!plaza.isOcupada() && plaza.getTipoVehiculo() == vehiculo.getTipoVehiculo()) {
@@ -77,7 +85,7 @@ public class Parking {
                 }
             }
         }
-        return "No hay plazas disponibles para este tipo de vehiculo.";
+        throw new NotFreePlacesException("\nNo hay plazas disponibles para este tipo de vehiculo.");
     }
 
     private String generarTicketId(Ticket ticket) {
@@ -90,11 +98,18 @@ public class Parking {
         double tarifa = listaTarifa.get(ticket.getVehiculo().getTipoVehiculo());
         double importe = ticket.calcularImporte(duracion, tarifa);
         ticketsActivos.remove(generarTicketId(ticket));  // Elimino el ticket de activos
-        return "\nEl metodo con el cual calculamos el importe es: Duracion del estacionamiento * Tarifa.\nLas tarifas son:\n   Para camiones el precio es el tiempo que ha estado estacionado.\n   Para motos se multiplica la duracion x3.\n   Para coches se multiplica la duracion x5.\n\nEl tiempo que ha estado en el Parking Monlau es: " + ticket.calcularDuracion() + " minutos.\n\nPlaza liberada. El importe a pagar son: " + importe + " euros.";
+        return "\nEl metodo con el cual calculamos el importe es: Duracion del estacionamiento * Tarifa.\nLas tarifas son:\n   "
+                + "Para camiones el precio es el tiempo que ha estado estacionado.\n   Para motos se multiplica la duracion x3.\n   "
+                + "Para coches se multiplica la duracion x5.\n\nEl tiempo que ha estado en el Parking Monlau es: " + ticket.calcularDuracion() + 
+                " minutos.\n\nPlaza liberada. El importe a pagar son: " + importe + " euros.";
     }
 
-    public Ticket buscarTicket(String ticketId) {
-        return ticketsActivos.get(ticketId);  // Devuelve el ticket o null en caso de que no lo encuentre
+    public Ticket buscarTicket(String ticketId) throws TicketNotFoundException {
+        Ticket ticket = ticketsActivos.get(ticketId);
+        if (ticket == null) {
+            throw new TicketNotFoundException("\nEl ticket no existe o es invalido.");
+        }
+        return ticket;
     }
 
     public void mostrarPlazas() {

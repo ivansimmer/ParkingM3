@@ -1,6 +1,6 @@
 package model;
 
-import model.data.EnumVehiculo;
+import model.data.enums.EnumVehiculo;
 
 /**
  *

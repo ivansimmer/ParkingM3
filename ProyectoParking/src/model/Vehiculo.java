@@ -1,7 +1,7 @@
 package model;
 
-import model.data.EnumColor;
-import model.data.EnumVehiculo;
+import model.data.enums.EnumColor;
+import model.data.enums.EnumVehiculo;
 
 /**
  *

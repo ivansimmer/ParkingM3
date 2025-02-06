@@ -6,13 +6,15 @@ import java.util.Scanner;
 import model.Parking;
 import model.Ticket;
 import model.Vehiculo;
-import model.data.EnumColor;
-import model.data.EnumVehiculo;
+import model.data.enums.EnumColor;
+import model.data.enums.EnumVehiculo;
+import model.data.exceptions.NotFreePlacesException;
+import model.data.exceptions.TicketNotFoundException;
 
 public class Main {
 
     public static void main(String[] args) {
-        
+
         // Lista de tarifas
         Map<EnumVehiculo, Double> tarifas = new HashMap<>();
         tarifas.put(EnumVehiculo.COCHE, 5.0);
@@ -37,7 +39,7 @@ public class Main {
             System.out.println("0. Salir");
             System.out.print("Elige una opcion: ");
 
-            // Valida que la opción sea un número
+            // Valido que la opcion sea un numero
             while (!scan.hasNextInt()) {
                 System.out.println("Opcion no valida. Por favor, ingresa un numero.");
                 scan.next();
@@ -102,19 +104,28 @@ public class Main {
                     }
 
                     Vehiculo vehiculo = new Vehiculo(tipoVehiculo, matricula, color);
-                    String ticket = parking.asignarPlaza(vehiculo);
-                    System.out.println("\n" + ticket);
+
+                    // Excepcion en caso de que no exista plaza para el vehiculo
+                    try {
+                        String ticket = parking.asignarPlaza(vehiculo);
+                        System.out.println("\n" + ticket);
+                    } catch (NotFreePlacesException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
 
                 case 7:
                     System.out.print("\nIntroduce el identificador del ticket (ejemplo: PR123_2_5): ");
                     String ticketId = scan.nextLine();
-                    Ticket ticketObj = parking.buscarTicket(ticketId);
-                    if (ticketObj != null) {
+
+                    // Excepcion en caso de que no exista o sea invalido el ticket introducido
+                    try {
+
+                        Ticket ticketObj = parking.buscarTicket(ticketId);
                         String mensaje = parking.liberarPlaza(ticketObj);
                         System.out.println(mensaje);
-                    } else {
-                        System.out.println("El ticket no existe o es invalido.");
+                    } catch (TicketNotFoundException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
 
