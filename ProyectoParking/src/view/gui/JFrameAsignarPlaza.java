@@ -6,7 +6,12 @@ package view.gui;
 
 import control.DataClass;
 import static control.DataClass.JFH;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import model.Parking;
 import model.Vehiculo;
 import model.data.enums.EnumColor;
@@ -44,40 +49,55 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         buttonBack = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabelTipoVehiculo = new javax.swing.JLabel();
+        jPanelForm = new javax.swing.JPanel();
         jLabelMatricula = new javax.swing.JLabel();
-        jLabelColor = new javax.swing.JLabel();
         jTextFieldMatricula = new javax.swing.JTextField();
+        jLabelTipoVehiculo = new javax.swing.JLabel();
         jComboBoxVehiculos = new javax.swing.JComboBox<>();
+        jLabelColor = new javax.swing.JLabel();
         jComboBoxColores = new javax.swing.JComboBox<>();
         jButtonAsigna = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaResultado = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Asignar una plaza");
+        setBackground(new java.awt.Color(255, 255, 255));
 
-        buttonBack.setText("Back");
+        jPanel1.setBackground(new java.awt.Color(0, 58, 255));
+
+        buttonBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/atras (1).png"))); // NOI18N
+        buttonBack.setBorderPainted(false);
+        buttonBack.setContentAreaFilled(false);
         buttonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonBackActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("ASIGNA UNA PLAZA");
         jLabel1.setToolTipText("");
 
-        jLabelTipoVehiculo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabelTipoVehiculo.setText("Tipo de vehiculo:");
+        jPanelForm.setBackground(new java.awt.Color(0, 204, 204));
+        jPanelForm.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        jPanelForm.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabelMatricula.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabelMatricula.setText("Matricula:");
 
-        jLabelColor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabelColor.setText("Color:");
-
         jTextFieldMatricula.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jTextFieldMatricula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldMatriculaActionPerformed(evt);
+            }
+        });
+
+        jLabelTipoVehiculo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelTipoVehiculo.setText("Tipo de vehiculo:");
 
         jComboBoxVehiculos.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jComboBoxVehiculos.addActionListener(new java.awt.event.ActionListener() {
@@ -86,79 +106,125 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxColores.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelColor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabelColor.setText("Color:");
 
-        jButtonAsigna.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButtonAsigna.setForeground(new java.awt.Color(255, 0, 0));
+        jComboBoxColores.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jComboBoxColores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxColoresActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelFormLayout = new javax.swing.GroupLayout(jPanelForm);
+        jPanelForm.setLayout(jPanelFormLayout);
+        jPanelFormLayout.setHorizontalGroup(
+            jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelFormLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelFormLayout.createSequentialGroup()
+                        .addComponent(jLabelMatricula)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                        .addComponent(jTextFieldMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(56, 56, 56))
+                    .addGroup(jPanelFormLayout.createSequentialGroup()
+                        .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanelFormLayout.createSequentialGroup()
+                                .addComponent(jLabelColor)
+                                .addGap(128, 128, 128)
+                                .addComponent(jComboBoxColores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanelFormLayout.createSequentialGroup()
+                                .addComponent(jLabelTipoVehiculo)
+                                .addGap(41, 41, 41)
+                                .addComponent(jComboBoxVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+        jPanelFormLayout.setVerticalGroup(
+            jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelFormLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelMatricula)
+                    .addComponent(jTextFieldMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelTipoVehiculo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBoxColores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelColor))
+                .addContainerGap(22, Short.MAX_VALUE))
+        );
+
+        jButtonAsigna.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButtonAsigna.setText("ASIGNA");
+        jButtonAsigna.setToolTipText("");
         jButtonAsigna.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAsignaActionPerformed(evt);
             }
         });
 
+        jTextAreaResultado.setEditable(false);
         jTextAreaResultado.setColumns(20);
+        jTextAreaResultado.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTextAreaResultado.setRows(5);
         jScrollPane1.setViewportView(jTextAreaResultado);
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/smart-parking-1.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(buttonBack)
-                .addGap(0, 636, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(188, 188, 188)
-                        .addComponent(jLabel1))
+                        .addContainerGap()
+                        .addComponent(buttonBack))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(68, 68, 68)
+                        .addGap(25, 25, 25)
+                        .addComponent(jLabel2)))
+                .addGap(1, 1, 1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(87, 87, 87))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabelMatricula)
-                                .addGap(57, 57, 57)
-                                .addComponent(jTextFieldMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(37, 37, 37)
+                                .addComponent(jPanelForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabelTipoVehiculo)
-                                .addGap(34, 34, 34)
-                                .addComponent(jComboBoxVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(195, 195, 195)
+                                .addComponent(jButtonAsigna))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabelColor)
-                                .addGap(43, 43, 43)
-                                .addComponent(jComboBoxColores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(220, 220, 220)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(281, 281, 281)
-                        .addComponent(jButtonAsigna)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(75, 75, 75)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(54, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(buttonBack)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addGap(49, 49, 49)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelMatricula)
-                    .addComponent(jTextFieldMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelTipoVehiculo)
-                    .addComponent(jComboBoxVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelColor)
-                    .addComponent(jComboBoxColores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButtonAsigna)
-                .addGap(50, 50, 50)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(buttonBack)
+                        .addGap(72, 72, 72)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanelForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonAsigna)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -213,6 +279,9 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
 
                     // Mostramos el resultado de la asignación en el área de texto
                     jTextAreaResultado.setText(resultado);
+                    jTextAreaResultado.setAlignmentX(CENTER_ALIGNMENT);
+                    
+
                     JFH.actualizarGrid(DataClass.getParking());
                 } catch (NotFreePlacesException e) {
                     // Si no hay plazas libres, mostramos un mensaje de error
@@ -224,6 +293,14 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No hay un parking asignado. Por favor, inicializa el parking.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButtonAsignaActionPerformed
+
+    private void jComboBoxColoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxColoresActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxColoresActionPerformed
+
+    private void jTextFieldMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldMatriculaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMatriculaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -267,10 +344,12 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBoxColores;
     private javax.swing.JComboBox<String> jComboBoxVehiculos;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelColor;
     private javax.swing.JLabel jLabelMatricula;
     private javax.swing.JLabel jLabelTipoVehiculo;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanelForm;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextAreaResultado;
     private javax.swing.JTextField jTextFieldMatricula;

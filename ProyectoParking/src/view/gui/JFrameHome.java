@@ -5,6 +5,11 @@
 package view.gui;
 
 import control.DataClass;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
+import static java.lang.Float.parseFloat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +43,7 @@ public class JFrameHome extends javax.swing.JFrame {
         DataClass.JFH = this;
         DataClass.setVisible();
         JLabel labelParking;
+        jPanelParking.setBackground(new Color(0,58,255));
     }
 
     /**
@@ -50,21 +56,35 @@ public class JFrameHome extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        buttonAsignar = new javax.swing.JButton();
-        buttonLiberar = new javax.swing.JButton();
-        jPanelParking = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
         labelParking = new javax.swing.JLabel();
+        jPanelParking = new javax.swing.JPanel();
+        buttonLiberar = new javax.swing.JButton();
+        buttonAsignar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 58, 255));
 
-        buttonAsignar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        buttonAsignar.setText("ASIGNAR PLAZA");
-        buttonAsignar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAsignarActionPerformed(evt);
-            }
-        });
+        jPanel1.setBackground(new java.awt.Color(0, 58, 255));
+
+        labelParking.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        labelParking.setForeground(new java.awt.Color(255, 255, 255));
+        labelParking.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelParking.setText("Parking Monlau");
+        labelParking.setToolTipText("");
+
+        jPanelParking.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        javax.swing.GroupLayout jPanelParkingLayout = new javax.swing.GroupLayout(jPanelParking);
+        jPanelParking.setLayout(jPanelParkingLayout);
+        jPanelParkingLayout.setHorizontalGroup(
+            jPanelParkingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 593, Short.MAX_VALUE)
+        );
+        jPanelParkingLayout.setVerticalGroup(
+            jPanelParkingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 151, Short.MAX_VALUE)
+        );
 
         buttonLiberar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         buttonLiberar.setText("LIBERAR PLAZA");
@@ -74,79 +94,63 @@ public class JFrameHome extends javax.swing.JFrame {
             }
         });
 
+        buttonAsignar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        buttonAsignar.setText("ASIGNAR PLAZA");
+        buttonAsignar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAsignarActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/monlau-fp-es.png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(98, 98, 98)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(buttonAsignar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(82, 82, 82)
                 .addComponent(buttonLiberar)
-                .addGap(121, 121, 121))
+                .addGap(126, 126, 126))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(97, 97, 97)
+                        .addComponent(labelParking, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanelParking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelParking, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(43, 43, 43)
+                .addComponent(jPanelParking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonAsignar)
                     .addComponent(buttonLiberar))
-                .addGap(52, 52, 52))
-        );
-
-        javax.swing.GroupLayout jPanelParkingLayout = new javax.swing.GroupLayout(jPanelParking);
-        jPanelParking.setLayout(jPanelParkingLayout);
-        jPanelParkingLayout.setHorizontalGroup(
-            jPanelParkingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 554, Short.MAX_VALUE)
-        );
-        jPanelParkingLayout.setVerticalGroup(
-            jPanelParkingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 287, Short.MAX_VALUE)
-        );
-
-        labelParking.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        labelParking.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelParking.setText("PARKING");
-        labelParking.setToolTipText("");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(labelParking, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(244, 244, 244))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
-                .addComponent(labelParking, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(44, 44, 44))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(101, 101, 101)
-                .addComponent(jPanelParking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(137, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanelParking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -167,6 +171,7 @@ public class JFrameHome extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonLiberarActionPerformed
 
     private void configParkingGrid() throws NotFreePlacesException {
+        
         jPanelParking.removeAll(); // Limpiar el panel antes de actualizar
 
         // Lista de tarifas
@@ -194,11 +199,12 @@ public class JFrameHome extends javax.swing.JFrame {
         // Configuramos el GridLayout para que el número de columnas se ajuste a los datos
         int filas = listaPlazas.size();
         int columnas = listaPlazas.get(0).size();
-        jPanelParking.setLayout(new java.awt.GridLayout(filas, columnas, 10, 10));
+        jPanelParking.setLayout(new java.awt.GridLayout(filas, columnas, 10, 50));
 
         for (ArrayList<Plaza> piso : listaPlazas) {
             for (Plaza plaza : piso) {
                 JLabel label = new JLabel("Plaza " + plaza.getNumeroPlaza(), javax.swing.SwingConstants.CENTER);
+                label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
                 label.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.BLACK));
 
                 // Color de fondo según si la plaza está ocupada o libre
@@ -260,8 +266,8 @@ public class JFrameHome extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAsignar;
     private javax.swing.JButton buttonLiberar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelParking;
     private javax.swing.JLabel labelParking;
     // End of variables declaration//GEN-END:variables
@@ -276,12 +282,13 @@ public class JFrameHome extends javax.swing.JFrame {
         // Configuramos el GridLayout para que el número de columnas se ajuste a los datos
         int filas = listaPlazas.size();
         int columnas = listaPlazas.get(0).size();
-        jPanelParking.setLayout(new java.awt.GridLayout(filas, columnas, 10, 10));
+        jPanelParking.setLayout(new java.awt.GridLayout(filas, columnas, 10, 50));
 
         // Crear y agregar las etiquetas al panel de acuerdo con el estado de cada plaza
         for (ArrayList<Plaza> piso : listaPlazas) {
             for (Plaza plaza : piso) {
                 JLabel label = new JLabel("Plaza " + plaza.getNumeroPlaza(), javax.swing.SwingConstants.CENTER);
+                label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
                 label.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.BLACK));
 
                 // Color de fondo según si la plaza está ocupada o libre

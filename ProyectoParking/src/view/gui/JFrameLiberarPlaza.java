@@ -6,6 +6,8 @@ package view.gui;
 
 import control.DataClass;
 import static control.DataClass.JFH;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 import model.Parking;
 import model.Ticket;
@@ -42,29 +44,36 @@ public class JFrameLiberarPlaza extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MostrarPlazasLibres");
+        setBackground(new java.awt.Color(0, 58, 255));
 
-        buttonBack.setText("Back");
+        jPanel1.setBackground(new java.awt.Color(0, 58, 255));
+
+        buttonBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/atras (1).png"))); // NOI18N
         buttonBack.setToolTipText("");
+        buttonBack.setBorderPainted(false);
+        buttonBack.setContentAreaFilled(false);
         buttonBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonBackActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("LIBERA UNA PLAZA");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Introduce tu codigo de ticket:");
 
+        jTextFieldTicket.setBackground(new java.awt.Color(0, 204, 204));
+        jTextFieldTicket.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jTextFieldTicket.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldTicketActionPerformed(evt);
             }
         });
 
-        jButtonLibera.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButtonLibera.setForeground(new java.awt.Color(255, 0, 0));
+        jButtonLibera.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButtonLibera.setText("LIBERA");
         jButtonLibera.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,16 +86,15 @@ public class JFrameLiberarPlaza extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(168, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(buttonBack)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTextFieldTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addGap(193, 193, 193))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(buttonBack))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(82, 82, 82)
                         .addComponent(jLabel2))
@@ -98,10 +106,13 @@ public class JFrameLiberarPlaza extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(buttonBack)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(buttonBack)))
                 .addGap(72, 72, 72)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
