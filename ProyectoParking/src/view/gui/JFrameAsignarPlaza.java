@@ -171,6 +171,8 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
         jTextAreaResultado.setColumns(20);
         jTextAreaResultado.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTextAreaResultado.setRows(5);
+        jTextAreaResultado.setAutoscrolls(false);
+        jTextAreaResultado.setMargin(new java.awt.Insets(2, 40, 2, 0));
         jScrollPane1.setViewportView(jTextAreaResultado);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/media/smart-parking-1.png"))); // NOI18N
@@ -187,24 +189,23 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addComponent(jLabel2)))
-                .addGap(1, 1, 1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(1, 78, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addGap(87, 87, 87))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(37, 37, 37)
+                                .addGap(38, 38, 38)
                                 .addComponent(jPanelForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(195, 195, 195)
+                                .addGap(196, 196, 196)
                                 .addComponent(jButtonAsigna))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(75, 75, 75)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(54, Short.MAX_VALUE))))
+                                .addGap(100, 100, 100)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,8 +224,8 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jButtonAsigna)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -278,9 +279,7 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
                     String resultado = DataClass.getParking().asignarPlaza(vehiculo);
 
                     // Mostramos el resultado de la asignación en el área de texto
-                    jTextAreaResultado.setText(resultado);
-                    jTextAreaResultado.setAlignmentX(CENTER_ALIGNMENT);
-                    
+                    jTextAreaResultado.setText(resultado);                    
 
                     JFH.actualizarGrid(DataClass.getParking());
                 } catch (NotFreePlacesException e) {
