@@ -26,4 +26,10 @@ public class Vehiculo {
     public String getMatricula() {
         return matricula;
     }
+
+    public EnumColor getColor() {
+        return color;
+    }
+    
+  
 }

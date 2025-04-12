@@ -8,13 +8,15 @@ import model.data.enums.EnumVehiculo;
  */
 public class Plaza {
     
+    private Long id;
     private int piso;
     private int numeroPlaza;
     private boolean ocupada;
     private Vehiculo vehiculoAsignado;
     private EnumVehiculo tipoVehiculo;
 
-    public Plaza(int piso, int numeroPlaza, EnumVehiculo tipoVehiculo) {
+    public Plaza(Long id, int piso, int numeroPlaza, EnumVehiculo tipoVehiculo) {
+        this.id = id;
         this.piso = piso;
         this.numeroPlaza = numeroPlaza;
         this.tipoVehiculo = tipoVehiculo;
@@ -46,6 +48,11 @@ public class Plaza {
     public int getNumeroPlaza() {
         return numeroPlaza + 1;
     }
+    
+    public Long getId() {
+        return id;
+    }
+
     
     public Vehiculo getVehiculoAsignado() {
         return vehiculoAsignado;

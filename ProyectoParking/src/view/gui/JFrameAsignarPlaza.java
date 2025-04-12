@@ -4,11 +4,21 @@
  */
 package view.gui;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import control.DataClass;
 import static control.DataClass.JFH;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -24,16 +34,23 @@ import model.data.exceptions.NotFreePlacesException;
  */
 public class JFrameAsignarPlaza extends javax.swing.JFrame {
 
-    private Parking parking;
-
     /**
      * Creates new form JFrameHome
      */
     public JFrameAsignarPlaza() {
+        // Lista de tarifas
+        Map<EnumVehiculo, Double> tarifas = new HashMap<>();
+        tarifas.put(EnumVehiculo.AUTO, 5.0);
+        tarifas.put(EnumVehiculo.MOTO, 3.0);
+        tarifas.put(EnumVehiculo.CAMIONETA, 1.0);
+
+        Parking parking = new Parking(123, "Parking Monlau", "C/ Monlau 6, Barcelona", "+34 666 66 66", 3, 10, tarifas);
+
         initComponents();
         configColores();
         configVehiculos();
 
+        DataClass.setParking(parking);
         parking = DataClass.getParking();
     }
 
@@ -122,23 +139,18 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
             jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelFormLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
+                .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabelMatricula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabelColor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabelTipoVehiculo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(41, 41, 41)
                 .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelFormLayout.createSequentialGroup()
-                        .addComponent(jLabelMatricula)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
-                        .addComponent(jTextFieldMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(56, 56, 56))
-                    .addGroup(jPanelFormLayout.createSequentialGroup()
-                        .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanelFormLayout.createSequentialGroup()
-                                .addComponent(jLabelColor)
-                                .addGap(128, 128, 128)
-                                .addComponent(jComboBoxColores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanelFormLayout.createSequentialGroup()
-                                .addComponent(jLabelTipoVehiculo)
-                                .addGap(41, 41, 41)
-                                .addComponent(jComboBoxVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jComboBoxVehiculos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jComboBoxColores, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jTextFieldMatricula, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(56, 56, 56))
         );
         jPanelFormLayout.setVerticalGroup(
             jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,10 +164,10 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
                     .addComponent(jComboBoxVehiculos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelTipoVehiculo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxColores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelColor))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jButtonAsigna.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -225,7 +237,7 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
                         .addComponent(jButtonAsigna)
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -255,7 +267,7 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBoxVehiculosActionPerformed
 
     private void jButtonAsignaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAsignaActionPerformed
-        // TODO add your handling code here:
+        // Verificamos si el parking está inicializado
         if (DataClass.getParking() != null) {
             String matricula = jTextFieldMatricula.getText();
 
@@ -274,17 +286,65 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
                 // Creamos el objeto Vehiculo
                 Vehiculo vehiculo = new Vehiculo(tipoVehiculo, matricula, colorVehiculo);
 
+                // Crear el JSON incluyendo el campo 'ticketId' vacío (o null)
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("ticketId", "");  // Aquí lo estamos pasando vacío, puedes poner null si lo prefieres
+                jsonObject.addProperty("matricula", vehiculo.getMatricula());
+                jsonObject.addProperty("tipo", vehiculo.getTipoVehiculo().toString());
+                jsonObject.addProperty("color", vehiculo.getColor().toString());
+
                 try {
-                    // Usamos DataClass.getParking() para obtener el objeto Parking
-                    String resultado = DataClass.getParking().asignarPlaza(vehiculo);
+                    // Usamos Gson para convertir el vehículo a JSON
+                    Gson gson = new Gson();
+                    String jsonVehiculo = gson.toJson(jsonObject);
 
-                    // Mostramos el resultado de la asignación en el área de texto
-                    jTextAreaResultado.setText(resultado);                    
+                    // Aquí haríamos la llamada al endpoint del servidor
+                    String endpointUrl = "http://localhost:1311/api/parking/reservar"; // Reemplaza con la URL correcta
+                    URL url = new URL(endpointUrl);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setRequestProperty("Content-Type", "application/json");
+                    connection.setDoOutput(true);
 
-                    JFH.actualizarGrid(DataClass.getParking());
-                } catch (NotFreePlacesException e) {
-                    // Si no hay plazas libres, mostramos un mensaje de error
-                    JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    // Enviamos el JSON del vehículo al servidor
+                    try (OutputStream os = connection.getOutputStream()) {
+                        byte[] input = jsonVehiculo.getBytes("utf-8");
+                        os.write(input, 0, input.length);
+                    }
+
+                    // Verificamos la respuesta del servidor
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        // Leer la respuesta del servidor
+                        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        String inputLine;
+                        StringBuilder response = new StringBuilder();
+
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+                        in.close();
+
+                        // Parseamos la respuesta JSON
+                        JsonObject jsonResponse = JsonParser.parseString(response.toString()).getAsJsonObject();
+
+                        // Extraemos los valores de la respuesta
+                        String ticketId = jsonResponse.get("ticketId").getAsString();
+
+                        // Mostramos la respuesta en la interfaz
+                        jTextAreaResultado.setText("Tu TicketID es: ");
+                        jTextAreaResultado.append("\n" + ticketId);
+                    } else {
+                        // Si ocurrió algún error en la asignación, lo mostramos
+                        jTextAreaResultado.setText("Error al reservar la plaza.");
+                    }
+
+                    // Actualizamos la vista de la cuadrícula (si es necesario)
+                    JFH.actualizarGrid();
+
+                } catch (Exception e) {
+                    // En caso de error, mostramos un mensaje
+                    JOptionPane.showMessageDialog(this, "Error al realizar la reserva: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         } else {
@@ -361,6 +421,7 @@ public class JFrameAsignarPlaza extends javax.swing.JFrame {
     }
 
     private void configVehiculos() {
+        // Llenamos el ComboBox con los valores del Enum
         for (EnumVehiculo vehiculo : EnumVehiculo.values()) {
             jComboBoxVehiculos.addItem(vehiculo.toString());
         }

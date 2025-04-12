@@ -6,5 +6,5 @@ package model.data.enums;
  */
 public enum EnumVehiculo {
     
-    COCHE, MOTO, CAMION;
+    AUTO, MOTO, CAMIONETA;
 }

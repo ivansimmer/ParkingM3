@@ -106,7 +106,7 @@
                           <Component id="jScrollPane1" min="-2" pref="188" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="20" max="32767" attributes="0"/>
+                  <EmptySpace pref="23" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -157,29 +157,22 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="jLabelMatricula" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="99" max="32767" attributes="0"/>
-                              <Component id="jTextFieldMatricula" min="-2" pref="157" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="jLabelColor" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="128" max="-2" attributes="0"/>
-                                      <Component id="jComboBoxColores" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="jLabelTipoVehiculo" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                                      <Component id="jComboBoxVehiculos" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jLabelMatricula" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="jLabelColor" max="32767" attributes="0"/>
+                              <Component id="jLabelTipoVehiculo" max="32767" attributes="0"/>
                           </Group>
                       </Group>
+                      <EmptySpace min="41" pref="41" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="0" attributes="0">
+                              <Component id="jComboBoxVehiculos" max="32767" attributes="0"/>
+                              <Component id="jComboBoxColores" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="jTextFieldMatricula" alignment="1" min="-2" pref="157" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -197,11 +190,11 @@
                           <Component id="jLabelTipoVehiculo" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jComboBoxColores" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelColor" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jComboBoxColores" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabelColor" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="22" max="32767" attributes="0"/>
+                      <EmptySpace pref="19" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

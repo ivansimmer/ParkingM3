@@ -4,10 +4,17 @@
  */
 package view.gui;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import control.DataClass;
 import static control.DataClass.JFH;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import javax.swing.JOptionPane;
 import model.Parking;
 import model.Ticket;
@@ -65,7 +72,7 @@ public class JFrameLiberarPlaza extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Introduce tu codigo de ticket:");
+        jLabel2.setText("Introduce tu ticket id:");
 
         jTextFieldTicket.setBackground(new java.awt.Color(0, 204, 204));
         jTextFieldTicket.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -161,78 +168,122 @@ public class JFrameLiberarPlaza extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldTicketActionPerformed
 
     private void jButtonLiberaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLiberaActionPerformed
-        // TODO add your handling code here:
+        String ticketId = jTextFieldTicket.getText().trim();
 
-        if (DataClass.getParking() != null) {
-            Parking parking = DataClass.getParking();
+        if (ticketId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debes introducir el código del ticket", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-            if (parking != null) {
-                String ticketId = jTextFieldTicket.getText();
+        try {
+            // Construir la URL del endpoint
+            String endpointUrl = "http://localhost:1311/api/parking/liberar/" + ticketId;
+            URL url = new URL(endpointUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-                if (ticketId.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Debes introducir el codigo del ticket", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    try {
-                        // Buscar el ticket usando el ID ingresado
-                        Ticket ticketObj = parking.buscarTicket(ticketId);
+            // Configurar la conexión
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setDoOutput(true);
 
-                        // Liberar la plaza correspondiente al ticket encontrado
-                        String resultado = parking.liberarPlaza(ticketObj);
+            // Obtener la respuesta
+            int responseCode = connection.getResponseCode();
+            String responseMessage = connection.getResponseMessage();
 
-                        // Mostrar el mensaje con el resultado
-                        JOptionPane.showMessageDialog(this, resultado, "Plaza Liberada", JOptionPane.INFORMATION_MESSAGE);
-                        
-                        JFH.actualizarGrid(DataClass.getParking());
-
-                        // Volver a la pantalla principal después de liberar la plaza
-                        DataClass.goToAnotherFrame(this, DataClass.JFH);
-                    } catch (TicketNotFoundException e) {
-                        // Manejar el caso cuando el ticket no se encuentra
-                        System.out.println(e.getMessage());
-                    }
+            // Leer la respuesta del servidor
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader in = new BufferedReader(
+                    new InputStreamReader(responseCode < HttpURLConnection.HTTP_BAD_REQUEST
+                            ? connection.getInputStream()
+                            : connection.getErrorStream()))) {
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
                 }
-            } else {
-                // Si no hay un parking inicializado
-                JOptionPane.showMessageDialog(this, "No hay un parking asignado. Por favor, inicializa el parking.", "Error", JOptionPane.ERROR_MESSAGE);
             }
+
+            // Procesar la respuesta
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                JsonObject jsonResponse = JsonParser.parseString(response.toString()).getAsJsonObject();
+
+                // Manejar la respuesta de manera más segura
+                String message = jsonResponse.has("message")
+                        ? jsonResponse.get("message").getAsString()
+                        : "Plaza liberada exitosamente";
+
+                // Añadir el costo si está disponible en la respuesta
+                if (jsonResponse.has("costo")) {
+                    double costo = jsonResponse.get("costo").getAsDouble();
+                    message += "\nCosto total: " + String.format("%.2f", costo) + " €";
+                }
+
+                JOptionPane.showMessageDialog(this, message, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                JFH.actualizarGrid();
+                DataClass.goToAnotherFrame(this, DataClass.JFH);
+            } else {
+                // Manejar errores del servidor
+                try {
+                    JsonObject errorJson = JsonParser.parseString(response.toString()).getAsJsonObject();
+                    String errorMessage = errorJson.has("message")
+                            ? errorJson.get("message").getAsString()
+                            : responseMessage;
+
+                    JOptionPane.showMessageDialog(this,
+                            "Error del servidor (" + responseCode + "): " + errorMessage,
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this,
+                            "Error del servidor (" + responseCode + "): " + response.toString(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al conectar con el servidor: " + e.getMessage(),
+                    "Error de conexión",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }//GEN-LAST:event_jButtonLiberaActionPerformed
 
     /**
-         * @param args the command line arguments
-         */
-        //    public static void main(String args[]) {
-        //        /* Set the Nimbus look and feel */
-        //        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        //        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-        //         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-        //         */
-        //        try {
-        //            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-        //                if ("Nimbus".equals(info.getName())) {
-        //                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-        //                    break;
-        //                }
-        //            }
-        //        } catch (ClassNotFoundException ex) {
-        //            java.util.logging.Logger.getLogger(JFramePlazasLibres.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        //        } catch (InstantiationException ex) {
-        //            java.util.logging.Logger.getLogger(JFramePlazasLibres.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        //        } catch (IllegalAccessException ex) {
-        //            java.util.logging.Logger.getLogger(JFramePlazasLibres.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-        //            java.util.logging.Logger.getLogger(JFramePlazasLibres.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        //        }
-        //        //</editor-fold>
-        //        //</editor-fold>
-        //
-        //        /* Create and display the form */
-        //        java.awt.EventQueue.invokeLater(new Runnable() {
-        //            public void run() {
-        //                new JFramePlazasLibres().setVisible(true);
-        //            }
-        //        });
-        //    }
+     * @param args the command line arguments
+     */
+    //    public static void main(String args[]) {
+    //        /* Set the Nimbus look and feel */
+    //        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    //        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    //         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+    //         */
+    //        try {
+    //            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+    //                if ("Nimbus".equals(info.getName())) {
+    //                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+    //                    break;
+    //                }
+    //            }
+    //        } catch (ClassNotFoundException ex) {
+    //            java.util.logging.Logger.getLogger(JFramePlazasLibres.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //        } catch (InstantiationException ex) {
+    //            java.util.logging.Logger.getLogger(JFramePlazasLibres.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //        } catch (IllegalAccessException ex) {
+    //            java.util.logging.Logger.getLogger(JFramePlazasLibres.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+    //            java.util.logging.Logger.getLogger(JFramePlazasLibres.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    //        }
+    //        //</editor-fold>
+    //        //</editor-fold>
+    //
+    //        /* Create and display the form */
+    //        java.awt.EventQueue.invokeLater(new Runnable() {
+    //            public void run() {
+    //                new JFramePlazasLibres().setVisible(true);
+    //            }
+    //        });
+    //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonBack;

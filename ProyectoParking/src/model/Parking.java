@@ -23,10 +23,10 @@ public class Parking {
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
-    
+
     // Para libres, color verde
     String freeSlotColor = ANSI_GREEN_BACKGROUND;
-    
+
     // Para ocupadas, color rojo
     String occupiedSlotColor = ANSI_RED_BACKGROUND;
 
@@ -38,7 +38,7 @@ public class Parking {
     private int numPlazasPorPiso;
     private Map<EnumVehiculo, Double> listaTarifa;
     private ArrayList<ArrayList<Plaza>> listaPlazas;
-    
+
     // Map para gestionar los tickets en activos
     private Map<String, Ticket> ticketsActivos;
 
@@ -61,13 +61,18 @@ public class Parking {
             for (int j = 0; j < numPlazasPorPiso; j++) {
                 EnumVehiculo tipo;
                 if (j == 0) {
-                    tipo = EnumVehiculo.CAMION; // La primera plaza es para camiones
+                    tipo = EnumVehiculo.CAMIONETA; // La primera plaza es para camiones
                 } else if (j == 1 || j == 2) {
                     tipo = EnumVehiculo.MOTO; // Las dos siguientes para motos
                 } else {
-                    tipo = EnumVehiculo.COCHE; // El resto para coches
+                    tipo = EnumVehiculo.AUTO; // El resto para coches
                 }
-                piso.add(new Plaza(i, j, tipo));
+
+                // Assuming you want to generate a unique ID for each Plaza (for example, with i and j)
+                Long plazaId = (long) (i * numPlazasPorPiso + j); // Example ID generation logic
+
+                // Now call the constructor with the ID
+                piso.add(new Plaza(plazaId, i, j, tipo));
             }
             listaPlazas.add(piso);
         }
@@ -100,8 +105,8 @@ public class Parking {
         ticketsActivos.remove(generarTicketId(ticket));  // Elimino el ticket de activos
         return "\nEl metodo con el cual calculamos el importe es: Duracion del estacionamiento * Tarifa.\nLas tarifas son:\n   "
                 + "Para camiones el precio es el tiempo que ha estado estacionado.\n   Para motos se multiplica la duracion x3.\n   "
-                + "Para coches se multiplica la duracion x5.\n\nEl tiempo que ha estado en el Parking Monlau es: " + ticket.calcularDuracion() + 
-                " minutos.\n\nPlaza liberada. El importe a pagar son: " + importe + " euros.";
+                + "Para coches se multiplica la duracion x5.\n\nEl tiempo que ha estado en el Parking Monlau es: " + ticket.calcularDuracion()
+                + " minutos.\n\nPlaza liberada. El importe a pagar son: " + importe + " euros.";
     }
 
     public Ticket buscarTicket(String ticketId) throws TicketNotFoundException {
@@ -117,7 +122,7 @@ public class Parking {
             System.out.println("Piso " + (i + 1) + ":");
             for (Plaza plaza : listaPlazas.get(i)) {
                 if (plaza.isOcupada()) {
-                    if (plaza.getTipoVehiculo().equals(EnumVehiculo.COCHE)) {
+                    if (plaza.getTipoVehiculo().equals(EnumVehiculo.AUTO)) {
                         System.out.print(occupiedSlotColor + " C ");
                     } else if (plaza.getTipoVehiculo().equals(EnumVehiculo.MOTO)) {
                         System.out.print(occupiedSlotColor + " M ");
@@ -125,7 +130,7 @@ public class Parking {
                         System.out.print(occupiedSlotColor + " T ");
                     }
                 } else {
-                    if (plaza.getTipoVehiculo().equals(EnumVehiculo.COCHE)) {
+                    if (plaza.getTipoVehiculo().equals(EnumVehiculo.AUTO)) {
                         System.out.print(freeSlotColor + " C ");
                     } else if (plaza.getTipoVehiculo().equals(EnumVehiculo.MOTO)) {
                         System.out.print(freeSlotColor + " M ");
@@ -144,7 +149,7 @@ public class Parking {
             sb.append("Piso ").append(i + 1).append(":\n");
             for (Plaza plaza : listaPlazas.get(i)) {
                 if (!plaza.isOcupada()) {
-                    if (plaza.getTipoVehiculo().equals(EnumVehiculo.COCHE)) {
+                    if (plaza.getTipoVehiculo().equals(EnumVehiculo.AUTO)) {
                         sb.append(freeSlotColor + " C ");
                     } else if (plaza.getTipoVehiculo().equals(EnumVehiculo.MOTO)) {
                         sb.append(freeSlotColor + " M ");

@@ -17,9 +17,9 @@ public class Main {
 
         // Lista de tarifas
         Map<EnumVehiculo, Double> tarifas = new HashMap<>();
-        tarifas.put(EnumVehiculo.COCHE, 5.0);
+        tarifas.put(EnumVehiculo.AUTO, 5.0);
         tarifas.put(EnumVehiculo.MOTO, 3.0);
-        tarifas.put(EnumVehiculo.CAMION, 1.0);
+        tarifas.put(EnumVehiculo.CAMIONETA, 1.0);
 
         // Datos del parking
         Parking parking = new Parking(123, "Parking Monlau", "C/ Monlau 6, Barcelona", "+34 666 66 66", 3, 10, tarifas);
@@ -61,7 +61,7 @@ public class Main {
 
                 case 3:
                     System.out.println("\nPlazas disponibles para Coches:");
-                    parking.mostrarPlazasPorTipo(EnumVehiculo.COCHE);
+                    parking.mostrarPlazasPorTipo(EnumVehiculo.AUTO);
                     break;
 
                 case 4:
@@ -71,7 +71,7 @@ public class Main {
 
                 case 5:
                     System.out.println("\nPlazas disponibles para Camiones:");
-                    parking.mostrarPlazasPorTipo(EnumVehiculo.CAMION);
+                    parking.mostrarPlazasPorTipo(EnumVehiculo.CAMIONETA);
                     break;
 
                 case 6:

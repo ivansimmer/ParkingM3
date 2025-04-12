@@ -4,18 +4,24 @@
  */
 package view.gui;
 
+import com.google.gson.Gson;
 import control.DataClass;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import static java.lang.Float.parseFloat;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import model.Parking;
 import model.Plaza;
 import model.Vehiculo;
@@ -43,7 +49,7 @@ public class JFrameHome extends javax.swing.JFrame {
         DataClass.JFH = this;
         DataClass.setVisible();
         JLabel labelParking;
-        jPanelParking.setBackground(new Color(0,58,255));
+        jPanelParking.setBackground(new Color(0, 58, 255));
     }
 
     /**
@@ -128,29 +134,27 @@ public class JFrameHome extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelParking, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(43, 43, 43)
+                .addGap(53, 53, 53)
                 .addComponent(jPanelParking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonAsignar)
                     .addComponent(buttonLiberar))
-                .addGap(44, 44, 44))
+                .addGap(35, 35, 35))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -170,44 +174,42 @@ public class JFrameHome extends javax.swing.JFrame {
         DataClass.goToAnotherFrame(this, DataClass.JFLP);
     }//GEN-LAST:event_buttonLiberarActionPerformed
 
-    private void configParkingGrid() throws NotFreePlacesException {
-        
-        jPanelParking.removeAll(); // Limpiar el panel antes de actualizar
+    private void configParkingGrid() {
+        try {
+            // Conexión al endpoint
+            URL url = new URL("http://localhost:1311/api/parking/plazas");  // Cambia la URL si es necesario
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Accept", "application/json");
 
-        // Lista de tarifas
-        Map<EnumVehiculo, Double> tarifas = new HashMap<>();
-        tarifas.put(EnumVehiculo.COCHE, 5.0);
-        tarifas.put(EnumVehiculo.MOTO, 3.0);
-        tarifas.put(EnumVehiculo.CAMION, 1.0);
-        
-        // Crear una instancia de Parking (esto es solo un ejemplo, asegúrate de tener los parámetros correctos)
-        Parking parking = new Parking(123, "Parking Monlau", "C/ Monlau 6, Barcelona", "+34 666 66 66", 3, 10, tarifas);
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
 
-        DataClass.setParking(parking);
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
 
-        // Verificar que el parking no es null antes de usarlo
-        if (DataClass.getParking() == null) {
-            System.out.println("Error: No se ha asignado un Parking");
-            return;
-        }
+            // Parsear el JSON de la respuesta
+            Gson gson = new Gson();
+            Plaza[] plazas = gson.fromJson(response.toString(), Plaza[].class);
 
-        labelParking.setText(parking.getNombre());
+            // Limpiar el panel antes de añadir las nuevas plazas
+            jPanelParking.removeAll();
 
-        // Obtener las plazas desde la instancia de Parking
-        ArrayList<ArrayList<Plaza>> listaPlazas = parking.getListaPlazas();
+            // Definir las columnas y filas en función del número de plazas
+            int columnas = 10;  // Esto puede cambiar dependiendo del tamaño de la pantalla y el diseño
+            int filas = (int) Math.ceil((double) plazas.length / columnas);
+            jPanelParking.setLayout(new java.awt.GridLayout(filas, columnas, 10, 10));  // Ajuste de espaciado
 
-        // Configuramos el GridLayout para que el número de columnas se ajuste a los datos
-        int filas = listaPlazas.size();
-        int columnas = listaPlazas.get(0).size();
-        jPanelParking.setLayout(new java.awt.GridLayout(filas, columnas, 10, 50));
-
-        for (ArrayList<Plaza> piso : listaPlazas) {
-            for (Plaza plaza : piso) {
-                JLabel label = new JLabel("Plaza " + plaza.getNumeroPlaza(), javax.swing.SwingConstants.CENTER);
+            // Añadir las plazas al panel
+            for (Plaza plaza : plazas) {
+                JLabel label = new JLabel("Plaza " + plaza.getId(), javax.swing.SwingConstants.CENTER);
                 label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
                 label.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.BLACK));
 
-                // Color de fondo según si la plaza está ocupada o libre
+                // Cambiar el color de fondo dependiendo si la plaza está ocupada
                 if (plaza.isOcupada()) {
                     label.setBackground(java.awt.Color.RED);  // Ocupada
                 } else {
@@ -215,13 +217,18 @@ public class JFrameHome extends javax.swing.JFrame {
                 }
                 label.setOpaque(true);
 
-                jPanelParking.add(label); // Añadimos la etiqueta al panel
+                // Añadir el label al panel
+                jPanelParking.add(label);
             }
-        }
 
-        // Revalidamos y repintamos el panel para que los cambios sean reflejados
-        jPanelParking.revalidate();
-        jPanelParking.repaint();
+            // Revalidar y repintar el panel para reflejar los cambios
+            jPanelParking.revalidate();
+            jPanelParking.repaint();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al obtener las plazas desde la API");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -273,25 +280,42 @@ public class JFrameHome extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     // Método para actualizar el estado de las plazas
-    public void actualizarGrid(Parking parking) {
-        jPanelParking.removeAll(); // Limpiar el panel antes de actualizar
+    public void actualizarGrid() {
+        try {
+            // Conexión al endpoint para obtener las plazas
+            URL url = new URL("http://localhost:1311/api/parking/plazas");  // Cambia la URL si es necesario
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Accept", "application/json");
 
-        // Obtener las plazas desde la instancia de Parking
-        ArrayList<ArrayList<Plaza>> listaPlazas = parking.getListaPlazas();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
 
-        // Configuramos el GridLayout para que el número de columnas se ajuste a los datos
-        int filas = listaPlazas.size();
-        int columnas = listaPlazas.get(0).size();
-        jPanelParking.setLayout(new java.awt.GridLayout(filas, columnas, 10, 50));
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
 
-        // Crear y agregar las etiquetas al panel de acuerdo con el estado de cada plaza
-        for (ArrayList<Plaza> piso : listaPlazas) {
-            for (Plaza plaza : piso) {
-                JLabel label = new JLabel("Plaza " + plaza.getNumeroPlaza(), javax.swing.SwingConstants.CENTER);
+            // Parsear el JSON de la respuesta
+            Gson gson = new Gson();
+            Plaza[] plazas = gson.fromJson(response.toString(), Plaza[].class);
+
+            // Limpiar el panel antes de añadir las nuevas plazas
+            jPanelParking.removeAll();
+
+            // Definir las columnas y filas en función del número de plazas
+            int columnas = 10;  // Esto puede cambiar dependiendo del tamaño de la pantalla y el diseño
+            int filas = (int) Math.ceil((double) plazas.length / columnas);
+            jPanelParking.setLayout(new java.awt.GridLayout(filas, columnas, 10, 10));  // Ajuste de espaciado
+
+            // Añadir las plazas al panel
+            for (Plaza plaza : plazas) {
+                JLabel label = new JLabel("Plaza " + plaza.getId(), javax.swing.SwingConstants.CENTER);
                 label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
                 label.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.BLACK));
 
-                // Color de fondo según si la plaza está ocupada o libre
+                // Cambiar el color de fondo dependiendo si la plaza está ocupada
                 if (plaza.isOcupada()) {
                     label.setBackground(java.awt.Color.RED);  // Ocupada
                 } else {
@@ -299,12 +323,18 @@ public class JFrameHome extends javax.swing.JFrame {
                 }
                 label.setOpaque(true);
 
-                jPanelParking.add(label); // Añadimos la etiqueta al panel
+                // Añadir el label al panel
+                jPanelParking.add(label);
             }
-        }
 
-        // Revalidamos y repintamos el panel para que los cambios sean reflejados
-        jPanelParking.revalidate();
-        jPanelParking.repaint();
+            // Revalidar y repintar el panel para reflejar los cambios
+            jPanelParking.revalidate();
+            jPanelParking.repaint();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al obtener las plazas desde la API");
+            e.printStackTrace();
+        }
     }
+
 }
